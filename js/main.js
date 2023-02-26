@@ -28,13 +28,16 @@ const play = (() => {
     let availableMoves = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     const movesMade = newBoard.map((x) => x.move);
     availableMoves = availableMoves.filter((x) => !movesMade.includes(x));
+    console.log('avail',availableMoves)
     return availableMoves;
   }
 
   const difficultyInput = document.querySelector("#difficulty");
   difficultyInput.addEventListener("change", setDifficulty);
+
   let probability = 0;
   let decision;
+
   function setDifficulty() {
     const level = difficultyInput.value;
     if (level === "easy") {
@@ -74,7 +77,10 @@ const play = (() => {
   function minimax(newBoard, playerNum) {
     fc++;
     console.log({ fc });
+    console.log(newBoard)
+    // array of indexes
     const availableSpots = legalMoves(newBoard);
+    console.log('isWin', isWinner(newBoard, playerOne,playerNum))
     // checking to make sure there is not a terminal state at this point
     if (isWinner(newBoard, playerOne.playerNum)) {
       return { score: -10 };
@@ -140,12 +146,13 @@ const play = (() => {
     } else {
       move = randomMove();
     }
-    play.currentMoves.push({
+    currentMoves.push({
       player: computer.playerNum,
       move,
     });
 
     tiles[move].innerText = computer.playerPiece;
+    tiles[move].removeEventListener('click', playPiece)
 
     if (isWinner(currentMoves, computer.playerNum)) {
       board.displayWinner(computer.playerNum);
@@ -187,6 +194,7 @@ const play = (() => {
     isWinner,
     playPiece,
     computerMove,
+    legalMoves
   };
 })();
 
