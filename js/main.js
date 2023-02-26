@@ -28,7 +28,7 @@ const play = (() => {
     let availableMoves = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     const movesMade = newBoard.map((x) => x.move);
     availableMoves = availableMoves.filter((x) => !movesMade.includes(x));
-    console.log('avail',availableMoves)
+    console.log("avail", availableMoves);
     return availableMoves;
   }
 
@@ -77,10 +77,10 @@ const play = (() => {
   function minimax(newBoard, playerNum) {
     fc++;
     console.log({ fc });
-    console.log(newBoard)
+    console.log(newBoard);
     // array of indexes
     const availableSpots = legalMoves(newBoard);
-    console.log('isWin', isWinner(newBoard, playerOne,playerNum))
+    console.log("isWin", isWinner(newBoard, playerOne, playerNum));
     // checking to make sure there is not a terminal state at this point
     if (isWinner(newBoard, playerOne.playerNum)) {
       return { score: -10 };
@@ -152,7 +152,7 @@ const play = (() => {
     });
 
     tiles[move].innerText = computer.playerPiece;
-    tiles[move].removeEventListener('click', playPiece)
+    tiles[move].removeEventListener("click", playPiece);
 
     if (isWinner(currentMoves, computer.playerNum)) {
       board.displayWinner(computer.playerNum);
@@ -194,7 +194,7 @@ const play = (() => {
     isWinner,
     playPiece,
     computerMove,
-    legalMoves
+    legalMoves,
   };
 })();
 
@@ -251,9 +251,16 @@ const board = (() => {
     document.querySelector(".gameBoardContainer").appendChild(tile);
   });
 
+  function showMove(move, player) {
+    const tiles = Array.from(document.querySelectorAll("boardTile"));
+    const tile = tiles[move];
+    tile.innerText = player.playerPiece;
+  }
+
   return {
     gameBoard,
     displayWinner,
+    showMove,
   };
 })();
 

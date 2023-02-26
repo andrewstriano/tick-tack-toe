@@ -3,7 +3,7 @@
     width: 400px;
     height: 400px;
     display: grid;
-    margin: 15rem auto;
+    margin: 2rem auto;
     margin-bottom: 30px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -11,12 +11,39 @@
     border-radius: 15px;
     text-align: center;
     padding: 5px;
+    box-shadow: 2px 2px 5px rgba(109, 166, 241, 0.5);
 }
+
 .symbolButtonContainer{
     margin: 3rem auto;
     width: 400px;
     text-align: center;
+    border: 1px  solid lightblue;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(109, 166, 241, 0.5);
+}
 
+.difficultyContainer{
+    margin: 2rem auto;
+    width: 400px;
+    text-align: center;
+    border: 1px  solid lightblue;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(109, 166, 241, 0.5);
+}
+.difficultyContainer select{
+    border: 1px solid lightgrey;
+    transition: all .2s;
+}
+.difficultyContainer select:focus{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+    transform: scale(1.1);
+}
+.difficultyContainer select:focus-visible{
+    border: 1px solid lightgray;
+    outline: none;
 }
 .playerPieceButton{
     padding: 8px 16px;
@@ -25,6 +52,16 @@
     background-color: lightblue;
     margin: 15px;
     width: 50px;
+    transition: all.2s;
+}
+.playerPieceButton:hover {
+    transform: scale(1.1);
+    background-color: rgb(143, 177, 189);
+    box-shadow: 2px 2px 5px rgba(109, 166, 241, 0.5);
+}
+.playerPieceButton:active{
+    background-color: rgb(116, 143, 153);
+    transform: scale(.9);
 }
 .boardTile{
     background-color: lightblue;
