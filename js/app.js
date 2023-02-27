@@ -5,29 +5,41 @@ const aiPlayer = playerFactory("O", 2);
 
 const gameController = (() => {
   const currentBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  let decision;
+  let probability = 20;
+  let fc = 0;
 
+  function isWinner(board, player) {
+    if (
+      (board[0] === player && board[1] === player && board[2] === player) ||
+      (board[3] === player && board[4] === player && board[5] === player) ||
+      (board[6] === player && board[7] === player && board[8] === player) ||
+      (board[0] === player && board[3] === player && board[6] === player) ||
+      (board[1] === player && board[4] === player && board[7] === player) ||
+      (board[2] === player && board[5] === player && board[8] === player) ||
+      (board[0] === player && board[4] === player && board[8] === player) ||
+      (board[2] === player && board[4] === player && board[6] === player)
+    ) {
+      return true;
+    }
+    return false;
+  }
   function legalMoves(board) {
     const availSpots = board.filter((x) => x !== "X").filter((x) => x !== "O");
     return availSpots;
   }
 
-  function showMove(tile, player) {
-    tile.innerText = player;
-  }
-  function humanMove(event) {
-    showMove(event.target, humanPlayer.symbol);
-    currentBoard[event.target.id] = humanPlayer.symbol;
-    event.target.removeEventListener('click', gameController.humanMove)
-    if (isWinner(currentBoard, humanPlayer.symbol)) {
-      boardController.displayWinner(humanPlayer);
-    } else if (legalMoves(currentBoard).length === 0) {
-      boardController.displayWinner("tie");
+  function computerPick() {
+    const decider = Math.round(Math.random() * 100);
+    if (decider > probability) {
+      console.log("random");
+      decision = "random";
     } else {
-      computerMove();
+      console.log("best");
+      decision = "best";
     }
   }
 
-  let decision;
   function computerMove() {
     computerPick();
     let move;
@@ -37,27 +49,41 @@ const gameController = (() => {
       move = randomMove();
     }
     boardController.tiles[move].innerText = aiPlayer.symbol;
-    boardController.tiles[move].removeEventListener('click', gameController.humanMove)
+    boardController.tiles[move].removeEventListener(
+      "click",
+      gameController.humanMove
+    );
     currentBoard[move] = aiPlayer.symbol;
-
     if (isWinner(currentBoard, aiPlayer.symbol)) {
       boardController.displayWinner(aiPlayer);
-    } else if (legalMoves(currentBoard).length === 0) {
-      boardController.displayWinner("tie");
     }
   }
-  function bestMove() {
-    const move = minimax(currentBoard, aiPlayer);
-    return move.index;
+
+  function humanMove(event) {
+    event.target.innerText = humanPlayer.symbol;
+    currentBoard[event.target.id] = humanPlayer.symbol;
+    event.target.removeEventListener("click", gameController.humanMove);
+    if (isWinner(currentBoard, humanPlayer.symbol)) {
+      boardController.displayWinner(humanPlayer);
+    } else if (legalMoves(currentBoard).length === 0) {
+      boardController.displayWinner("tie");
+    } else {
+      computerMove();
+    }
   }
+  if (isWinner(currentBoard, aiPlayer.symbol)) {
+    boardController.displayWinner(aiPlayer);
+  } else if (legalMoves(currentBoard).length === 0) {
+    boardController.displayWinner("tie");
+  }
+
   function randomMove() {
     const availableMoves = legalMoves(currentBoard);
     const moveIndex = Math.round(Math.random() * (availableMoves.length - 1));
     const move = availableMoves[moveIndex];
     return move;
   }
-  // set prob to easy automatically
-  let probability = 20;
+
   const difficultyInput = document.querySelector("#difficulty");
 
   function setDifficulty() {
@@ -75,19 +101,8 @@ const gameController = (() => {
   // links input to difficulty
   difficultyInput.addEventListener("change", setDifficulty);
 
-  function computerPick() {
-    const decider = Math.round(Math.random() * 100);
-    if (decider > probability) {
-      console.log("random");
-      decision = "random";
-    } else {
-      console.log("best");
-      decision = "best";
-    }
-  }
-  let fc = 0;
   function minimax(newBoard, player) {
-    fc++;
+    fc += 1;
     console.log({ fc });
     // array of indexes
     const availableSpots = legalMoves(newBoard);
@@ -148,31 +163,16 @@ const gameController = (() => {
     }
     return moves[ultimateMove];
   }
-
-  function isWinner(board, player) {
-    if (
-      (board[0] == player && board[1] == player && board[2] == player) ||
-      (board[3] == player && board[4] == player && board[5] == player) ||
-      (board[6] == player && board[7] == player && board[8] == player) ||
-      (board[0] == player && board[3] == player && board[6] == player) ||
-      (board[1] == player && board[4] == player && board[7] == player) ||
-      (board[2] == player && board[5] == player && board[8] == player) ||
-      (board[0] == player && board[4] == player && board[8] == player) ||
-      (board[2] == player && board[4] == player && board[6] == player)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+  function bestMove() {
+    const move = minimax(currentBoard, aiPlayer);
+    return move.index;
   }
   return {
     legalMoves,
-    showMove,
     humanMove,
     currentBoard,
   };
 })();
-
 const boardController = (() => {
   // creates the ability to choose symbol and changes players based on that
   const xButton = document.querySelector("#xButton");
@@ -216,8 +216,9 @@ const boardController = (() => {
   resetButton.addEventListener("click", reset);
   function reset() {
     tiles.forEach((x) => (x.innerText = ""));
+    tiles.forEach((x) => x.addEventListener("click", gameController.humanMove));
     for (let i = 0; i < gameController.currentBoard.length; i++) {
-      gameController.currentBoard[i] = i; 
+      gameController.currentBoard[i] = i;
     }
     results.innerText = "";
   }
