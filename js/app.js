@@ -214,7 +214,9 @@ const boardController = (() => {
   resetButton.addEventListener("click", reset);
   function reset() {
     tiles.forEach((x) => (x.innerText = ""));
-    gameController.currentBoard = [];
+    for (let i = 0; i < gameController.currentBoard.length; i++) {
+      gameController.currentBoard[i] = i; 
+    }
     results.innerText = "";
   }
   return {
