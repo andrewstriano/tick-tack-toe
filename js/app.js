@@ -200,14 +200,22 @@ const boardController = (() => {
     tile.addEventListener("click", gameController.humanMove);
     document.querySelector(".gameBoardContainer").appendChild(tile);
   }
+  const results = document.querySelector(".resultsContainer");
   function displayWinner(player) {
     if (player === humanPlayer) {
-      alert("you win");
+      results.innerText = "You Win!!";
     } else if (player === aiPlayer) {
-      alert("you lose");
+      results.innerText = "You Lose!!";
     } else if (player === "tie") {
-      alert("ITS A TIE");
+      results.innerText = "Its a Tie";
     }
+  }
+  const resetButton = document.querySelector("#playAgain");
+  resetButton.addEventListener("click", reset);
+  function reset() {
+    tiles.forEach((x) => (x.innerText = ""));
+    gameController.currentBoard = [];
+    results.innerText = "";
   }
   return {
     tiles,

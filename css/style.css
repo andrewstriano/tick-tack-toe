@@ -74,8 +74,18 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    transition: all .2s;
 }
+.boardTile:hover{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+    transform: scale(1.1);
+}
+
 .resultsContainer{
     font-size: 5rem;
+    text-align: center;
+}
+#playAgain{
+    width: auto;
     text-align: center;
 }
