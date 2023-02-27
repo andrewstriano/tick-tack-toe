@@ -17,6 +17,7 @@ const gameController = (() => {
   function humanMove(event) {
     showMove(event.target, humanPlayer.symbol);
     currentBoard[event.target.id] = humanPlayer.symbol;
+    event.target.removeEventListener('click', gameController.humanMove)
     if (isWinner(currentBoard, humanPlayer.symbol)) {
       boardController.displayWinner(humanPlayer);
     } else if (legalMoves(currentBoard).length === 0) {
@@ -36,6 +37,7 @@ const gameController = (() => {
       move = randomMove();
     }
     boardController.tiles[move].innerText = aiPlayer.symbol;
+    boardController.tiles[move].removeEventListener('click', gameController.humanMove)
     currentBoard[move] = aiPlayer.symbol;
 
     if (isWinner(currentBoard, aiPlayer.symbol)) {
