@@ -41,9 +41,9 @@ const gameController = (() => {
     currentBoard[move] = aiPlayer.symbol;
 
     if (isWinner(currentBoard, aiPlayer.symbol)) {
-      boardController.displaywinner(aiPlayer);
+      boardController.displayWinner(aiPlayer);
     } else if (legalMoves(currentBoard).length === 0) {
-      boardController.displaywinner("tie");
+      boardController.displayWinner("tie");
     }
   }
   function bestMove() {
